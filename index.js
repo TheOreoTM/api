@@ -2,6 +2,12 @@ const express = require('express');
 const app = express();
 const PORT = 8080;
 const endpoints = ['/story', '/add', `/sub`];
+
+function countWords(str) {
+  const arr = str.split(' ');
+
+  return arr.filter((word) => word !== '').length;
+}
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -27,12 +33,6 @@ app.get('/sub', (req, res) => {
 
 app.get('/story', (req, res) => {
   const story = req.query.text;
-
-  function countWords(str) {
-    const arr = str.split(' ');
-
-    return arr.filter((word) => word !== '').length;
-  }
   const words = countWords(story);
 
   res.write(`
