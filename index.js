@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = 8080;
-const endpoints = ['/story', '/add'];
+const endpoints = ['/story', '/add', `/sub`];
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -18,14 +18,22 @@ app.get('/add', (req, res) => {
   res.send({ output: total });
 });
 
-app.get('/story/:text', (req, res) => {
-  const { text } = req.params;
+app.get('/sub', (req, res) => {
+  const first = parseInt(req.query.num1);
+  const second = parseInt(req.query.num2);
+  const total = first - second;
+  res.send({ output: total });
+});
+
+app.get('/story', (req, res) => {
+  const story = req.query.text;
+
   function countWords(str) {
     const arr = str.split(' ');
 
     return arr.filter((word) => word !== '').length;
   }
-  const words = countWords(text);
+  const words = countWords(story);
 
   res.write(`
 <!DOCTYPE html>
@@ -73,7 +81,7 @@ app.get('/story/:text', (req, res) => {
           font-family: 'Montserrat', sans-serif;
         "
       >
-        ${text}
+        ${story}
       </p>
     </div>
 
