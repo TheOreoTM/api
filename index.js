@@ -4,7 +4,11 @@ const PORT = 8080;
 
 app.use(express.json());
 
-app.get('/display/:text', (req, res) => {
+app.get('/', (req, res) => {
+  res.send({ error: 'Endpoint not found', endpoints: ['/story,'] });
+});
+
+app.get('/story/:text', (req, res) => {
   const { text } = req.params;
   function countWords(str) {
     const arr = str.split(' ');
