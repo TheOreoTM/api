@@ -4,8 +4,16 @@ const PORT = 8080;
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send({ error: 'Endpoint not found', endpoints: ['/story,'] });
+app.get('/', (res) => {
+  res.status(200);
+  res.send({ error: 'Endpoint not found', endpoints: ['/story', '/add'] });
+});
+
+app.get('/add:first:second', (req, res) => {
+  res.status(200);
+  const { first } = req.params;
+  const { second } = req.params;
+  res.send({ output: `${first + second}` });
 });
 
 app.get('/story/:text', (req, res) => {
@@ -16,7 +24,7 @@ app.get('/story/:text', (req, res) => {
     return arr.filter((word) => word !== '').length;
   }
   const words = countWords(text);
-
+  res.status(200);
   res.write(`
 <!DOCTYPE html>
 <html lang="en">
