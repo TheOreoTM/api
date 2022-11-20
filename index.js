@@ -33,7 +33,7 @@ app.get('/sub', (req, res) => {
   res.send({ output: total });
 });
 
-app.get('/factor', (req, res) => {
+app.get('/factorise', (req, res) => {
   const equation = req.query.equation;
   fetch(`https://newton.vercel.app/api/v2/factor/${equation}`)
     .then((response) => {
