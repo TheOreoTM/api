@@ -1,8 +1,9 @@
-const { response } = require('express');
 const express = require('express');
 const app = express();
 const PORT = 8080;
 const endpoints = ['/story', '/add', `/sub`];
+const fetch = (...args) =>
+  import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 function countWords(str) {
   const arr = str.split(' ');
@@ -42,8 +43,11 @@ app.get('/factor', (req, res) => {
       return response.json();
     })
     .then((data) => {
+      // console.log(data);
       res.send({
-        data,
+        operation: 'factor',
+        expression: data.expression,
+        result: data.result,
       });
     });
 });
