@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = 8080;
-const endpoints = ['/story', '/add', `/sub`];
+const endpoints = ['/story', '/add', `/sub`, `/factorise`, `/checkWord`];
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -17,6 +17,24 @@ app.get('/', (req, res) => {
     error: 'Endpoint not found',
     endpoints: endpoints,
   });
+});
+
+app.get('/checkWord', (req, res) => {
+  const word = req.query.word;
+  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw Error('ERROR');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.title == 'No Definitions Found') {
+        res.send({ message: 'No word found' }).sendStatus(400);
+      } else {
+        res.send({ message: 'Word exists', info: data }).sendStatus(200);
+      }
+    });
 });
 
 app.get('/add', (req, res) => {
