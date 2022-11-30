@@ -100,7 +100,8 @@ app.get(`/worldCup/next`, (req, res) => {
           venue: { stadium: data.venue, location: data.location },
           home_team: { abr: data.home_team.country, name: data.home_team.name },
           away_team: { abr: data.away_team.country, name: data.away_team.name },
-          time: (new Date(data.datetime).valueOf() / 1000).toFixed(0),
+          timestamp: (new Date(data.datetime).valueOf() / 1000).toFixed(0),
+          time: data.datetime,
         });
       });
       res.send(output);
