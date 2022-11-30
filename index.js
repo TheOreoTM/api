@@ -1,10 +1,23 @@
 const express = require('express');
+
 const app = express();
 const PORT = 8080;
 const endpoints = ['/story', '/add', `/sub`, `/factorise`, `/checkWord`];
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
+async function getData(link) {
+  fetch(link)
+    .then((response) => {
+      if (!response.ok) {
+        throw Error('ERROR');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    });
+}
 function countWords(str) {
   const arr = str.split(' ');
 
@@ -67,6 +80,38 @@ app.get('/factorise', (req, res) => {
         expression: data.expression,
         result: data.result,
       });
+    });
+});
+
+app.get(`/worldCup/next`, (req, res) => {
+  fetch('https://worldcupjson.net/matches/today/?by_date=ASC')
+    .then((response) => {
+      if (!response.ok) {
+        throw Error('ERROR');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      let output = [];
+      data.forEach((element, index) => {
+        data = element;
+
+        output.push({
+          venue: { stadium: data.venue, location: data.location },
+          home_team: { abr: data.home_team.country, name: data.home_team.name },
+          away_team: { abr: data.away_team.country, name: data.away_team.name },
+          time: (new Date(data.datetime).valueOf() / 1000).toFixed(0),
+        });
+      });
+      res.send(output);
+      // data = data[0];
+
+      // res.send({
+      //   venue: { stadium: data.venue, location: data.location },
+      //   home_team: { abr: data.home_team.country, name: data.home_team.name },
+      //   away_team: { abr: data.away_team.country, name: data.away_team.name },
+      //   time: (new Date(data.datetime).valueOf() / 1000).toFixed(0),
+      // });
     });
 });
 
