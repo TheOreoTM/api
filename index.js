@@ -97,6 +97,7 @@ app.get(`/worldCup/next`, (req, res) => {
         data = element;
 
         output.push({
+          id: data.id,
           venue: { stadium: data.venue, location: data.location },
           home_team: { abr: data.home_team.country, name: data.home_team.name },
           away_team: { abr: data.away_team.country, name: data.away_team.name },
@@ -105,14 +106,6 @@ app.get(`/worldCup/next`, (req, res) => {
         });
       });
       res.send(output);
-      // data = data[0];
-
-      // res.send({
-      //   venue: { stadium: data.venue, location: data.location },
-      //   home_team: { abr: data.home_team.country, name: data.home_team.name },
-      //   away_team: { abr: data.away_team.country, name: data.away_team.name },
-      //   time: (new Date(data.datetime).valueOf() / 1000).toFixed(0),
-      // });
     });
 });
 
